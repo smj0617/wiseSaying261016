@@ -3,25 +3,31 @@ package com.back;
 import java.util.Scanner;
 
 public class Main {
-    public static void main(String[] args){
+    public static void main(String[] args) {
         System.out.println("== 명언 앱 ==");
-
-        Scanner sc = new Scanner(System.in);
-        int i=1;
+        int lastIndex =0;
+        Scanner word = new Scanner(System.in);
+        WiseSaying[] a = new WiseSaying[100];
         while (true) {
-
             System.out.print("명령) ");
-            String cmd = sc.nextLine().trim();
-            if (cmd.equals("종료")) break;
-            else if (cmd.equals("등록")) {
-                System.out.print("명언 :");
-                String content = sc.nextLine().trim();
+            String text = word.nextLine().trim();
+            if(text.equals("종료")) break;
+            else if (text.equals("등록")){
+                a[lastIndex] = new WiseSaying();
+                a[lastIndex].num = lastIndex+1;
+                System.out.print("명언 : ");
+                a[lastIndex].message = word.nextLine().trim();
+                System.out.print("작가 : ");
+                a[lastIndex].author = word.nextLine().trim();
+                lastIndex++;
 
-                System.out.print("작가 :");
-                String author = sc.nextLine().trim();
-
-                System.out.printf("%d번 명언이 등록되었습니다.\n",i);
-                i+=1;
+            }
+            else if(text.equals("목록")){
+                System.out.println("번호 / 작가 / 명언");
+                System.out.println("----------------------");
+                for (int i =lastIndex-1 ; i>=0;i--){
+                    System.out.printf("%d / %s / %s\n",a[i].num,a[i].author,a[i].message);
+                }
             }
         }
     }
