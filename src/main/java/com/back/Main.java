@@ -17,6 +17,7 @@ public class Main {
                 author = scan.nextLine().trim();
                 System.out.print("작가 : ");
                 tell = scan.nextLine().trim();
+                System.out.println("1번 명언이 등록되었습니다.");
             }
         }
     }
