@@ -8,6 +8,7 @@ public class Main {
         Scanner scan = new Scanner(System.in);
         String author;
         String tell;
+        int index=1;
         while(true) {
             System.out.print("명령) ");
             String word = scan.nextLine().trim();
@@ -17,7 +18,8 @@ public class Main {
                 author = scan.nextLine().trim();
                 System.out.print("작가 : ");
                 tell = scan.nextLine().trim();
-                System.out.println("1번 명언이 등록되었습니다.");
+                System.out.printf("%d번 명언이 등록되었습니다.\n",index);
+                index++;
             }
         }
     }
