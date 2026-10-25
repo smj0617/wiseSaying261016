@@ -5,91 +5,89 @@ import java.util.List;
 import java.util.Scanner;
 
 public class App {
-    private Scanner sc= new Scanner(System.in);
+
+    private static List<WiseSaying> wiseSayings = new ArrayList<>();
+    private static Scanner sc= new Scanner(System.in);
     private int id=0;
-    private List<WiseSaying> WiseSayings= new ArrayList<>();
 
     public void run() {
         System.out.println("== 명언 앱 ==");
         while(true){
-            System.out.print("명령) ");
-            String word=sc.nextLine().trim();
-            if(word.equals("종료")) break;
-            else if(word.equals("등록")){
+            System.out.println("명령) ");
+            String order = sc.nextLine().trim();
+            if(order.equals("종료")) break;
+            else if(order.equals("등록")){
                 actionWrite();
             }
-            else if(word.equals("목록")){
+            else if(order.equals("목록")){
                 actionList();
             }
-            else if(word.startsWith("삭제")){
-                actionDelete(word);
+            else if(order.startsWith("삭제")){
+                actionDelete(order);
             }
-            else if(word.startsWith("수정")){
-                actionModify(word);
+            else if(order.startsWith("수정")){
+                actionModify(order);
             }
         }
     }
 
-    private void actionModify(String word) {
-        String[] temps= word.split("=",2);
-        if(temps.length !=2 || temps[1].isBlank()) {
-            System.out.println("id를 입력해주세요");
+    private void actionModify(String order) {
+        String[] temps= order.split("=",2);
+        if(temps.length != 2 || temps[1].isBlank()){
+            System.out.println("id를 입력하십시오.");
             return;
         }
         int id= Integer.parseInt(temps[1]);
-        WiseSaying wiseSaying = findById(id);
-        if (wiseSaying==null) {
-            System.out.printf("%d번 명언은 존재하지 않습니다.\n",id);
+        WiseSaying modifySaying= findForWiseSayingById(id);
+        if (modifySaying ==null) {
+            System.out.printf("%d번 명언은 존재하지 않습니다.",id);
             return;
         }
-        System.out.printf("명언(기존) : %s\n명언 :",wiseSaying.getTell());
-        String tell = sc.nextLine().trim();
-        System.out.printf("작가(기존) : %s\n작가",wiseSaying.getAuthor());
+        System.out.printf("명언(기존) : %s\n 명언 : ",modifySaying.getSentence());
+        String sentence = sc.nextLine().trim();
+        System.out.printf("작가(기존) : %s\n 작가 : ",modifySaying.getAuthor());
         String author = sc.nextLine().trim();
-
-        modify(wiseSaying,author,tell);
+        modify(modifySaying,sentence,author);
     }
 
-    private void modify(WiseSaying wiseSaying, String author, String tell) {
-        wiseSaying.setAuthor(author);
-        wiseSaying.setTell(tell);
+    private void modify(WiseSaying modifySaying, String sentence, String author) {
+        modifySaying.setStence(sentence);
+        modifySaying.setAuthor(author);
     }
 
-    private WiseSaying findById(int id) {
-        int index = findForIndexById(id);
-        if( index ==-1)return null;
-        return WiseSayings.get(index);
+    private WiseSaying findForWiseSayingById(int id) {
+        for(int i=0 ; i<wiseSayings.size();i++){
+            if(wiseSayings.get(i).getId()== id ) return wiseSayings.get(i);
+        }
+        return null;
     }
 
-
-    private void actionDelete(String word) {
-        String[] temps= word.split("=",2);
-        if(temps.length !=2 || temps[1].isBlank()) {
-            System.out.println("id를 입력해주세요.");
+    private void actionDelete(String order) {
+        String[] temps =order.split("=",2);
+        if( temps.length != 2 || temps[1].isBlank()) {
+            System.out.println("id를 입력하십시오.");
             return;
         }
         int id= Integer.parseInt(temps[1]);
-        int deleteIndex = delete(id);
-        if (deleteIndex==-1) {
+        int deleteIndex= delete(id);
+        if (deleteIndex == -1) {
             System.out.printf("%d번 명언은 존재하지 않습니다.\n",id);
             return;
         }
-
-        System.out.printf("%d번 명언이 삭제 되었습니다.\n",id);
-
+        System.out.printf("%d번 명언이 삭제되었습니다.\n",id);
 
     }
 
     private int delete(int id) {
-        int deleteIndex = findForIndexById(id);
-        if (deleteIndex == -1) return -1;
-        WiseSayings.remove(deleteIndex);
+        int deleteIndex=findForIndexById(id);
+        if(deleteIndex== -1) return -1;
+        wiseSayings.remove(deleteIndex);
         return deleteIndex;
     }
 
     private int findForIndexById(int id) {
-        for(int i=0;i<WiseSayings.size();i++){
-            if(WiseSayings.get(i).getId()==id) return i;
+        for(int i=0;i<wiseSayings.size();i++){
+            if(wiseSayings.get(i).getId()==id)return i;
         }
         return -1;
     }
@@ -97,27 +95,29 @@ public class App {
     private void actionList() {
         System.out.println("번호 / 작가 / 명언");
         System.out.println("----------------------");
-        List<WiseSaying> list = findForList();
-        for(int i=0; i<list.size();i++){
-            System.out.printf("%d / %s / %s\n",list.get(i).getId(),list.get(i).getAuthor(),list.get(i).getTell());
+        List<WiseSaying> sayingList = findForList();
+        for(int i=0; i<sayingList.size(); i++){
+            System.out.printf("%d / %s / %s\n",sayingList.get(i).getId(),sayingList.get(i).getAuthor(),sayingList.get(i).getSentence());
         }
     }
 
     private List<WiseSaying> findForList() {
-        return WiseSayings.reversed();
+        return wiseSayings.reversed();
     }
 
     private void actionWrite() {
         System.out.print("명언 : ");
-        String tell= sc.nextLine().trim();
+        String sentence = sc.nextLine().trim();
         System.out.print("작가 : ");
-        String author= sc.nextLine().trim();
-        WiseSaying writingWiseSaying = write(author,tell);
-        WiseSayings.add(writingWiseSaying);
+        String author = sc.nextLine().trim();
+
+        WiseSaying wiseSaying = write(sentence,author);
+        System.out.printf("%d번 명언이 등록되었습니다.\n",wiseSaying.getId());
     }
 
-    private WiseSaying write(String author, String tell) {
-        WiseSaying newWise = new WiseSaying(author,tell,++id);
-        return newWise;
+    private WiseSaying write(String sentence, String author) {
+        WiseSaying wiseSaying = new WiseSaying(++id,sentence,author);
+        wiseSayings.add(wiseSaying);
+        return wiseSaying;
     }
 }
