@@ -3,15 +3,16 @@ package com.back;
 public class WiseSaying {
     private String author;
     private String tell;
-    private int num;
-    public WiseSaying(String tell, String author, int id) {
-        this.tell =tell;
+    private final int id;
+
+    WiseSaying(String author, String tell, int id){
         this.author=author;
-        num=id;
+        this.tell=tell;
+        this.id=id;
     }
 
     public int getId() {
-        return num;
+        return id;
     }
 
     public String getAuthor() {
@@ -23,7 +24,7 @@ public class WiseSaying {
     }
 
     public void setTell(String tell) {
-        this.tell= tell;
+        this.tell=tell;
     }
 
     public void setAuthor(String author) {
