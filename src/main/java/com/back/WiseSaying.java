@@ -1,7 +1,11 @@
 package com.back;
 
 public class WiseSaying {
-    int num;
-    String author;
-    String tell;
+    private String author;
+    private String tell;
+
+    public WiseSaying(String tell, String author) {
+        this.tell =tell;
+        this.author=author;
+    }
 }
