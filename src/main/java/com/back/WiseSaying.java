@@ -21,4 +21,12 @@ public class WiseSaying {
     public String getTell() {
         return tell;
     }
+
+    public void setTell(String tell) {
+        this.tell= tell;
+    }
+
+    public void setAuthor(String author) {
+        this.author=author;
+    }
 }
