@@ -3,6 +3,7 @@ package com.back;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+import java.util.stream.IntStream;
 
 public class App {
 
@@ -38,7 +39,7 @@ public class App {
             return;
         }
         int id= Integer.parseInt(temps[1]);
-        WiseSaying modifySaying= findForWiseSayingById(id);
+        WiseSaying modifySaying= findById(id);
         if (modifySaying ==null) {
             System.out.printf("%d번 명언은 존재하지 않습니다.",id);
             return;
@@ -55,11 +56,12 @@ public class App {
         modifySaying.setAuthor(author);
     }
 
-    private WiseSaying findForWiseSayingById(int id) {
-        for(int i=0 ; i<wiseSayings.size();i++){
-            if(wiseSayings.get(i).getId()== id ) return wiseSayings.get(i);
-        }
-        return null;
+    private WiseSaying findById(int id) {
+        return wiseSayings
+                .stream()
+                .filter( e-> e.getId() == id)
+                .findFirst()
+                .orElse(null);
     }
 
     private void actionDelete(String order) {
@@ -86,10 +88,11 @@ public class App {
     }
 
     private int findForIndexById(int id) {
-        for(int i=0;i<wiseSayings.size();i++){
-            if(wiseSayings.get(i).getId()==id)return i;
-        }
-        return -1;
+        return IntStream.range(0,wiseSayings.size())
+                .filter(e-> wiseSayings.get(e).getId() == id)
+                .findFirst()
+                .orElse(-1);
+
     }
 
     private void actionList() {
