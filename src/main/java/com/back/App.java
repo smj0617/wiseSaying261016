@@ -6,7 +6,7 @@ import java.util.Scanner;
 
 public class App {
     private static Scanner sc= new Scanner(System.in);
-    private int id;
+    private int lastId=0;
     private List<WiseSaying> a = new ArrayList<>();
     public void run() {
         System.out.println("== 명언 앱 ==");
@@ -21,25 +21,34 @@ public class App {
                 actionList();
             }
             else if (word.equals("삭제")){
-                actionDelete(id);
+                actionDelete(word);
             }
             else if (word.equals("수정")){
-                actionModify(id);
+                actionModify(word);
             }
                     
         }
         
     }
 
-    private void actionModify(int id) {
+    private void actionModify(String id) {
     }
 
-    private void actionDelete(int id) {
+    private void actionDelete(String id) {
 
     }
 
     private void actionList() {
-        
+        System.out.println("번호 / 작가 / 명언");
+        System.out.println("----------------------");
+        List <WiseSaying> findForWiseSayings= findForList();
+        for(WiseSaying WiseSaying : findForWiseSayings){
+            System.out.printf("%d / %s / %s\n",WiseSaying.getId(),WiseSaying.getAuthor(),WiseSaying.getTell());
+        }
+    }
+
+    private List<WiseSaying> findForList() {
+        return a.reversed();
     }
 
     private void actionWrite() {
@@ -47,8 +56,14 @@ public class App {
         String tell = sc.nextLine().trim();
         System.out.print("작가 : ");
         String author = sc.nextLine().trim();
-        WiseSaying b = new WiseSaying(tell, author);
-        a.add(b);
+        WiseSaying b = write(tell, author);
+        System.out.printf("%d번 명언이 등록되었습니다.\n",b.getId());
 
+
+    }
+    private WiseSaying write(String tell,String author){
+       WiseSaying wiseSaying = new WiseSaying(tell,author,++lastId);
+       a.add(wiseSaying);
+       return wiseSaying;
     }
 }
